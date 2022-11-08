@@ -1,0 +1,170 @@
+
+35) Find out which customers have been issued movie number 6.
+
+SQL> select fname, lname from cust where cust_id in (select cust_id from invoice where mv_no = 4);
+
+FNAME           LNAME
+--------------- ---------------
+Satyam	        Patil
+
+
+36) Find the customer name and area with invoice number '17'
+
+SQL> select fname,lname,area from cust where cust_id=(select cust_id from invoice where inv_no=17);
+
+FNAME            LNAME          AR
+--------------- --------------- --
+Manish           Kumar          IN
+
+
+37) Find the name of the movie issued to �Vandana� or �Ivan�. 
+
+SQL> select title from movie where mv_no in (select mv_no from invoice where cust_id in (select cust_id from cust where fname in ('Manav','Bighna')));
+
+TITLE
+-------------------------
+Fury
+Venom
+
+38) Find the type and movie number of movie issued to cust_id �123� or �124�
+
+SQL> select type,mv_no from movie where mv_no in (select mv_no from invoice where cust_id in (123, 124));
+
+TYPE            MV_NO
+---------- ----------
+SciFi          	1
+War	        2
+
+39) Find out if the movie starring �Tom Hardy� is issued to any customer and print the cust_id to whom it is issued. 
+
+SQL> select cust_id from cust where cust_id in (select cust_id from invoice where mv_no in (select mv_no from movie where star='Tom Hardy'));
+
+CUS
+---
+225
+
+40)  Find the customer names and phone numbers who have been issued movies before the month of August.
+
+SQL> select fname,lname,phone_no from cust where cust_id in (select cust_id from invoice where issue_date<'01-AUG-22');
+
+FNAME           LNAME             PHONE_NO
+--------------- --------------- ----------
+Subhrajit	Mondal	          6456780
+
+
+41) List the movie number, movie issued to all customers. 
+
+SQL> select mv_no,title from movie where mv_no in (select mv_no from invoice);
+
+ MV_NO     TITLE
+------ ------------
+ 1	 Oxygen
+ 2	 Fury
+ 3	 Venom
+ 4	 Spiderhead
+ 5	 RRR
+
+
+
+Queries using dates:
+
+
+42) Display the invoice number and day on which customers were issued movies. 
+
+SQL> select inv_no, to_char(issue_date,'Day') from invoice;
+
+INV TO_CHAR(ISSUE_DATE,'DAY')
+--- ------------------------------------
+11	Wednesday
+11	Friday   
+11	Tuesday  
+11	Wednesday
+11	Thursday 
+
+43) Display the month (in alphabets) in which customers are supposed to return the movies. 
+
+SQL> select to_char(return_date,'Month') from invoice;
+
+TO_CHAR(RETURN_DATE,'MONTH')
+------------------------------------
+August   
+August   
+August   
+August   
+August   
+
+44) Display the issue_date in the format �dd-month-yy� e.g. 12-February- 93 
+
+SQL> select inv_no, to_char(issue_date,'DD-Month-YY') from invoice;
+
+INV TO_CHAR(ISSUE_DATE,'DD-MONTH-YY')
+--- ------------------------------------------
+11	03-August   -22
+11	05-August   -22
+11	02-August   -22
+11	03-August   -22
+11	04-July     -02
+
+
+45) Find the date, 15 days after the current date. 
+
+SQL> select sysdate+15 from dual;
+
+SYSDATE+1
+---------
+22-SEP-22
+
+
+46) Find the number of days elapsed between the current date and the return date of the movie for all customers. 
+
+SQL> select inv_no,to_date(to_char(sysdate,'dd-Mon-yy')) - return_date from invoice;
+
+INV TO_DATE(TO_CHAR(SYSDATE,'DD-MON-YY'))-RETURN_DATE
+--- -------------------------------------------------
+11	32
+11	30
+11	34
+11	31
+11	7336
+
+ 
+Table Updations:- 
+ 
+47) Change the telephone number of 'Neeraj' to 466389. 
+
+SQL>  update cust
+      set phone_no = 466389
+      where fname = 'Akash';
+
+1 row updated.
+
+48) Change the issue_date of cust_id �a01� to 24/07/93.
+
+ SQL> update invoice
+      set issue_date = '04-JUL-02'
+      where cust_id = 127;
+
+1 row updated.
+
+49) Delete the record with invoice number �i08�from the invoice table. 
+
+SQL> delete from invoice where inv_no = 11;
+
+5 row deleted.
+
+50) Delete all the records having return date before 10th July 93. 
+
+SQL> delete invoice where return_date < '10-JUL-93';
+
+0 rows deleted.
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,8 @@
+set xrange [0:7]
+set yrange [0:7]
+set arrow from 5,2 to 2,2
+set arrow from 2,2 to 5,3
+set arrow from 2,2 to 3,3
+set arrow from 2,2 to 4,3
+set arrow from 5,3 to 5,2
+plot 'Points.txt' with circles

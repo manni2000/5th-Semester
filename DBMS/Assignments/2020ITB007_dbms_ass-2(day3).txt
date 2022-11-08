@@ -1,0 +1,309 @@
+Create Tables 
+
+create table Branch
+( b_name varchar2(10) primary key,
+  city varchar2(10) check(city in ('Delhi','Kolkata','Mumbai'))
+);
+
+create table Customer
+( c_name varchar2(10) primary key check(c_name = upper(c_name)),
+  city varchar2(10) not null
+);
+
+create table Deposit
+( act_no varchar2(10) primary key,
+  c_name varchar2(10) references customer,
+  b_name varchar2(10) references branch,
+  amount number(10,2) not null
+);
+
+create table Borrow
+( loan_no varchar2(10) primary key check(loan_no = upper(loan_no)),
+  c_name varchar2(10) references customer,
+  b_name varchar2(10) references branch,
+  amount number(10,2) check(amount>1000)
+);
+
+INSERT INTO Branch(b_name, city) Values('Hdf12', 'Delhi');
+INSERT INTO Branch(b_name, city) Values('Sbi2', 'Kolkata');
+INSERT INTO Branch(b_name, city) Values('Uco3', 'Mumbai');
+INSERT INTO Branch(b_name, city) Values('Wb5', 'Delhi');
+INSERT INTO Branch(b_name, city) Values('Cb15', 'Kolkata');
+INSERT INTO Branch(b_name, city) Values('Sy12', 'Mumbai');
+INSERT INTO Branch(b_name, city) Values('Thane', 'Mumbai');
+INSERT INTO Branch(b_name, city) Values('Panvel', 'Mumbai');
+INSERT INTO Branch(b_name, city) Values('Andheri', 'Mumbai');
+INSERT INTO Branch(b_name, city) Values('Sarojini', 'Delhi');
+
+
+
+INSERT INTO Customer(c_name, city) Values('MANISH', 'Kolkata');
+INSERT INTO Customer(c_name, city) Values('RAHUL', 'Delhi');
+INSERT INTO Customer(c_name, city) Values('JATIN', 'Mumbai');
+INSERT INTO Customer(c_name, city) Values('PIYUSH', 'Kolkata');
+INSERT INTO Customer(c_name, city) Values('ARTHAK', 'Delhi');
+INSERT INTO Customer(c_name, city) Values('BIGHNA', 'Delhi');
+INSERT INTO Customer(c_name, city) Values('VIJAY', 'Nagpur');
+INSERT INTO Customer(c_name, city) Values('RAHUL', 'Hyderabad');
+INSERT INTO Customer(c_name, city) Values('ABHISHEK', 'Mumbai');
+INSERT INTO Customer(c_name, city) Values('VIRAT', 'Delhi');
+INSERT INTO Customer(c_name, city) Values('NEERAJ', 'Nagpur');
+INSERT INTO Customer(c_name, city) Values('PAVAN', 'Nagpur');
+
+
+
+INSERT INTO Deposit(act_no, c_name, b_name, amount) Values('CBI121', 'MANISH', 'Hdf12', 1000);
+INSERT INTO Deposit(act_no, c_name, b_name, amount) Values('SBI120', 'RAHUL', 'Sbi2', 3000);
+INSERT INTO Deposit(act_no, c_name, b_name, amount) Values('UCO101', 'JATIN', 'Uco3', 5000);
+INSERT INTO Deposit(act_no, c_name, b_name, amount) Values('HDF221', 'PIYUSH', 'Hdf12', 7000);
+INSERT INTO Deposit(act_no, c_name, b_name, amount) Values('WB021', 'ARTHAK', 'Cb15', 9000);
+INSERT INTO Deposit(act_no, c_name, b_name, amount) Values('GB321', 'BIGHNA', 'Sy12', 10000);
+INSERT INTO Deposit(act_no, c_name, b_name, amount) Values('BOI121','VIJAY','Thane',2536);
+INSERT INTO Deposit(act_no, c_name, b_name, amount) Values('SBI102','ABHISHEK','Andheri',5000);
+INSERT INTO Deposit(act_no, c_name, b_name, amount) Values('HDFC10','VIRAT','Sarojini',7775);
+INSERT INTO Deposit(act_no, c_name, b_name, amount) Values('UC234', 'SHREYASH', 'Uco7', 100000);
+INSERT INTO Deposit(act_no, c_name, b_name, amount) Values('CBI232', 'NEERAJ', 'Sbi6', 12000);
+INSERT INTO Deposit(act_no, c_name, b_name, amount) Values('WB978', 'PAVAN', 'Sbi4', 18000);
+INSERT INTO Deposit(act_no, c_name, b_name, amount) Values('Cb543', 'MANAV', 'Cb18', 70000);
+
+
+
+INSERT INTO Borrow(loan_no, c_name, b_name, amount) Values('HX1', 'MANISH', 'Hdf12', 2000);
+INSERT INTO Borrow(loan_no, c_name, b_name, amount) Values('HX2', 'RAHUL', 'Sbi2', 3000);
+INSERT INTO Borrow(loan_no, c_name, b_name, amount) Values('HX3', 'JATIN', 'Uco3', 5000);
+INSERT INTO Borrow(loan_no, c_name, b_name, amount) Values('HX4', 'PIYUSH', 'Hdf12', 7000);
+INSERT INTO Borrow(loan_no, c_name, b_name, amount) Values('HX5', 'ARTHAK', 'Cb15', 9000);
+INSERT INTO Borrow(loan_no, c_name, b_name, amount) Values('HX6', 'BIGHNA', 'Sy12', 10000);
+INSERT INTO Borrow(loan_no, c_name, b_name, amount) Values('HX7','VIJAY','Thane',2087);
+INSERT INTO Borrow(loan_no, c_name, b_name, amount) Values('HX8','RAHUL','Panvel',1523);
+INSERT INTO Borrow(loan_no, c_name, b_name, amount) Values('HX9','ABHISHEK','Andheri',1525);
+INSERT INTO Borrow(loan_no, c_name, b_name, amount) Values('HX10','VIRAT','Sarojini',1500);
+INSERT INTO Borrow(loan_no, c_name, b_name, amount) Values('238', 'NEERAJ', 'Sbi2', 9000);
+INSERT INTO Borrow(loan_no, c_name, b_name, amount) Values('875', 'PAVAN', 'Sbi2', 10000);
+INSERT INTO Borrow(loan_no, c_name, b_name, amount) Values('L234', 'SHREYASH', 'Uco3', 7000);
+
+
+
+1. Give the name of the customers having living city Nagpur and branch city Kolkata.
+
+SQL- select c_name from deposit where c_name in(select c_name from customer where city in('Nagpur')) 
+     and b_name in(select b_name from branch where city in('Kolkata')) union select c_name from borrow where c_name in
+     (select c_name from customer where city in('Nagpur')) and b_name in(select b_name from branch where city in('Kolkata'));
+
+Result- C_NAME
+       --------
+        NEERAJ
+        PAVAN
+
+2. Give the name of the customers having the same living city as their branch city Kolkata.
+
+SQL- select c_name from deposit where c_name in(select c_name from customer where city in('Kolkata')) 
+     and b_name in(select b_name from branch where city in('Kolkata')) 
+     union select c_name from borrow where c_name in(select c_name from customer where city in('Kolkata')) 
+     and b_name in(select b_name from branch where city in('Kolkata'));
+
+Result- C_NAME
+      ---------
+        JATIN
+        MANAV
+
+
+3. Give the name of the customers who are deposits and have same branch city as that of Manish.
+
+SQL- select c_name from deposit where b_name in(select b_name from branch where city in
+     (select city from customer where c_name in('MANISH')));
+
+Result- C_NAME
+       --------
+         RAHUL
+         ARTHAK
+
+4. Give the deposit details and loan details of customersin the city where Rahul is living.
+
+SQL- select * from deposit where b_name in(select b_name from branch where city = (select city from customer where c_name ='RAHUL'))
+     union select * from borrow where b_name in(select b_name from branch where city = (select city from customer where c_name ='RAHUL'));
+
+Result- ACT_NO	    C_NAME	      B_NAME	AMOUNT
+      ---------      --------      --------    --------
+       CBI121	    MANISH	       Hdf12	1000
+       HDF221	    PIYUSH	       Hdf12	7000
+       HDFC10	    VIRAT	     Sarojini	77752
+       HX1	    MANISH	       Hdf12    2000
+       HX10	    VIRAT	     Sarojini	15000
+       HX4	    PIYUSH	       Hdf12	7000
+
+
+5. List the no. of customers who are depositors as well as borrowers.
+
+SQL- select count(c_name) from borrow where c_name in(select c_name from deposit);
+
+Result- COUNT(C_NAME)
+       ----------------
+             13
+
+6. Give the name of borrowers loan amount greater than loan amount of Arthak.
+
+SQL- select c_name from borrow where amount > (select amount from borrow where c_name='ARTHAK');
+
+Result- C_NAME
+       --------
+        BIGHNA
+        VIJAY
+        RAHUL
+        ABHISHEK
+        VIRAT
+
+7. Give the name of depositors having the same branch city as that of jatin and having the same city as that of Piyush.
+
+SQL- select c_name from deposit where (b_name in (select b_name from branch where city in
+    (select city from branch where b_name in(select b_name from deposit where c_name = 'JATIN')))) and
+    (c_name in(select c_name from customer where city in(select city from customer where c_name in
+    (select c_name from deposit where c_name = 'PIYUSH'))));
+
+Result- C_NAME
+      ----------
+        NEERAJ
+        PAVAN
+
+8. List all the depositors living is city kol & having branch is city Delhi.
+
+SQL- select * from deposit where (b_name in (select b_name from branch where city='Delhi')) and 
+     (c_name in (select c_name from customer where city='Kolkata'))
+
+Result- ACT_NO     C_NAME     B_NAME         AMOUNT
+       ---------- ---------- ----------    ----------
+        CBI121     MANISH     Hdf12            1000
+        HDF221     PIYUSH     Hdf12            7000
+
+9. List all the Customers who are both depositors & borrowers & living is the same city as Piyush.
+
+SQL- select * from customer where (city in(select city from customer where c_name='PIYUSH')) and 
+     (c_name in (select c_name from deposit where c_name in(select c_name from borrow)));
+
+Result- C_NAME     CITY
+      ---------  ---------
+        MANISH	   Kolkata
+        PIYUSH     Kolkata
+
+
+10. List the customers who are borrowers or depositors & having living city kol & branch city same as that of Piyush.
+
+SQL- select customer.c_name from customer,deposit where (customer.c_name=deposit.c_name) and 
+     (city='Kolkata') and (b_name=(select b_name from deposit where c_name='PIYUSH')) 
+     union select customer.c_name from customer,borrow where (customer.c_name=borrow.c_name) and 
+     (city='Kolkata') and (b_name=(select b_name from borrow where c_name='PIYUSH'));
+
+Result- C_NAME
+      ----------
+        MANISH
+        PIYUSH
+
+
+11. list all cities where branches of Anil and Sunil are located
+
+SQL- Select City FROM Branch WHERE B_name in ((Select Deposit.B_name FROM Deposit,Branch WHERE Deposit.B_name=Branch.B_name AND Deposit.c_name='SUNIL' or Deposit.C_Name='ANIL')
+UNION ((Select borrow.B_name FROM Borrow,Branch WHERE Borrow.B_name=Branch.B_name AND Borrow.c_name='SUNIL' or Borrow.C_Name='ANIL')));
+
+Result- no row selected
+
+12. List the name of the branch having highest no of depositors.
+
+SQL- select b_name from deposit group by(b_name) having count(c_name) = (select max(count(c_name)) from deposit group by(b_name));
+
+Result- B_NAME
+      ----------
+         Hdf12
+
+13. List the name of customers having maximum deposit.
+
+SQL- select c_name, amt from (select c_name, amount as amt from deposit) where amt >= all (select amount from deposit);
+
+Result- C_NAME	 AMT
+       --------  -------
+        BIGHNA	10000
+
+
+14. List all the customers, along with their amount, who are either borrowers or depositors and living city is Delhi.
+
+SQL- select c_name, amount from deposit where b_name in ( select deposit.b_name from branch, deposit where branch.b_name = deposit.b_name and city = 'Delhi')
+ UNION select c_name, amount from borrow where b_name in ( select borrow.b_name from branch, borrow where branch.b_name = borrow.b_name and city = 'Delhi');
+
+Result- C_NAME	AMOUNT
+      ---------  --------
+        MANISH	1000
+        MANISH	2000
+        PIYUSH	7000
+        VIRAT	1500
+        VIRAT	7775
+
+
+15. List all the depositors having deposit in all the branches where Piyush is having account.
+
+SQL- select c_name, b_name from deposit where b_name in ( select b_name from deposit where c_name = 
+'Piyush');
+
+Result- C_NAME     B_NAME
+       --------- ----------
+         Piyush    Hdf12
+
+
+16. List total deposit of the customers living in the city where Manish is living.
+
+SQL- select sum(amount) from deposit where b_name in ( select b_name from branch, customer where customer.city = branch.city and customer.c_name = ('Manish'));
+
+Result- SUM(AMOUNT)
+        ----------
+          1000
+
+17. List the name of the customers in ‘ABC’ branch having more deposits than any other customer in same branch.
+
+SQL- select deposit.c_name,SUM(amount) FROM deposit group by(C_Name, B_Name) HAVING SUM(amount)>= ALL ( select sum(amount) from deposit where deposit.b_name = 'Cb15' group by c_name) AND B_name='Cb15';
+
+Result- C_NAME	SUM(AMOUNT)
+       -------  -----------
+        ARTHAK	  9000
+
+18. List the name of the customers having highest deposits in the city where branch of Sunil is located.
+
+SQL- select c_name from deposit where amount=(select max(amount) from deposit,branch where deposit.b_name = branch.b_name and city in 
+(select city from deposit,branch  where deposit.b_name = branch.b_name and c_name='Manish' union
+select city from borrow,branch  where borrow.b_name = branch.b_name and c_name='Manish'));
+
+Result- No row selected.
+
+19. List the name of the depositors having maximum deposits among depositors of Delhi for the branch ‘ABC’.
+
+SQL- Select C_name, amount FROM deposit WHERE C_name IN ((SELECT C_name FROM deposit WHERE B_name = 'Kolkata') 
+INTERSECT (Select C_name FROM customer WHERE City = 'Kolkata')) AND amount >= ALL((Select amount FROM deposit WHERE B_name = 'Sbi2') 
+INTERSECT (Select amount FROM customer WHERE City = 'Kolkata'));
+
+Result- No row selected.
+
+20. Give the name of the branches having the no. of depositors more than the no. of borrowers.
+
+SQL- Select deposit.B_name FROM deposit group by B_name having COUNT(C_name) > ALL(Select COUNT(borrow.c_name) FROM borrow WHERE borrow.B_name=deposit.B_name group by B_name );
+
+Result- B_NAME
+       ----------
+        SBIBG
+        HDFCBG
+
+
+
+21. give the names of the borrowers having the same branch city and highest borrower.
+
+22. Give 10% interest to all depositors living in Kolkata and branch city in Delhi.
+
+23. Assign to the deposit of Anil the maximum deposit from ‘ABC’ branch.
+
+24. Transfer Rs. 1000 from the account of Anil to the account of Sunil if both are having same branch.
+
+25. Add Rs.1000 to the account of those depositors who are having highest deposit amount in their respective branches.
+
+26. Add Rs.1000 to the amount of all depositors having deposit equal to or higher than the average deposit of their branches.
+
+27. Delete borrower of branches having average loan less than 1000.
+
+28. Delete the borrower of branches having minimum number of customers.
+
+29. Delete the deposit of Sunil and Anil if both are having same living city.

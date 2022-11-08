@@ -1,0 +1,106 @@
+11) List all cities where branches of Anil and Sunil are Located.
+
+Select City FROM Branch WHERE B_name in ((Select Deposit.B_name FROM Deposit,Branch WHERE Deposit.B_name=Branch.B_name AND Deposit.c_name='SUNIL' or Deposit.C_Name='ANIL')
+UNION ((Select borrow.B_name FROM Borrow,Branch WHERE Borrow.B_name=Branch.B_name AND Borrow.c_name='SUNIL' or Borrow.C_Name='ANIL')))
+
+12)
+
+SQL> select b_name from deposit group by(b_name) having count(c_name) = (select max(count(c_name)) from deposit group by(b_name));
+
+B_NAME
+----------
+HDFCBG
+
+13. List the name of customers having maximum deposit
+
+SQL> select c_name, amt from (select c_name, amount as amt from deposit) where amt >= all (select amount 
+from deposit);
+
+
+C_NAME            AMT
+---------- ----------
+Anil            90000
+
+
+
+14. List all the customers, along with their amount, who are either borrowers or
+depositors and living city is Delhi
+SQL> select c_name, amount from deposit where b_name in ( select deposit.b_name from branch, deposit where branch.b_name = deposit.b_name and city = 'Delhi')
+  2  UNION select c_name, amount from borrow where b_name in ( select borrow.b_name from branch, borrow where branch.b_name = borrow.b_name and city = 'Delhi');
+
+C_NAME         AMOUNT
+---------- ----------
+Amar            20000
+Amar            30000
+Anil            90000
+Neeraj          15000
+
+
+
+15. List all the depositors having deposit in all the branches where Sunil is having
+account.
+
+
+SQL> select c_name, b_name from deposit where b_name in ( select b_name from deposit where c_name = 
+'Anil');
+
+C_NAME     B_NAME
+---------- ----------
+Anil       HDFCND
+
+16. List total deposit of the customers living in the city where Sunil is living.
+
+SQL> select sum(amount) from deposit where b_name in ( select b_name from branch, customer where customer.city = branch.city and customer.c_name = 'Manish');
+
+SUM(AMOUNT)
+-----------
+     120000
+
+
+17. List the name of the customers in ‘ABC’ branch having more deposits than any other customer in same branch.
+
+SQL> select deposit.c_name,SUM(amount) FROM deposit group by(C_Name, B_Name) HAVING SUM(amount)>= ALL ( select sum(amount) from deposit where deposit.b_name = 'HDFCBG' group by c_name) AND B_name='HDFCBG';
+
+C_NAME     SUM(AMOUNT)
+---------- -----------
+Akash            35000
+
+
+18. List the name of the customers having highest deposits in the city where branch of Sunil is located.
+
+
+select deposit.c_name, sum(amount) from deposit group by deposit.c_name having sum(amount) >= all (select sum(amount) from deposit where deposit.b_name = (select deposit.b_name from deposit where deposit.c_name = 'Manav'));
+
+select max(sum(amount)) from deposit where deposit.b_name = (select deposit.b_name from deposit where deposit.c_name = 'Manav') and deposit.c_name = 'Manav';
+
+SQL> select c_name, sum(amount) from deposit,branch where deposit.b_name = branch.b_name and branch.
+  1  city in (select city from deposit,branch where c_name = 'Manav' and deposit.b_name = branch.b_name)
+  2  group by(c_name) having sum(amount) >= all ( select sum(amount) from deposit,branch
+  3  where deposit.b_name = branch.b_name and branch.city in (select city from deposit,branch where 
+c_name = 'Manav' and deposit.b_name = branch.b_name) group by(c_name));
+
+C_NAME     SUM(AMOUNT)
+---------- -----------
+Akash            35000
+Ram              35000
+
+
+
+19. List the name of the depositors having maximum deposits among depositors of Kolkata
+for the branch 'HDFCBG'.
+
+Select C_name, amount FROM deposit WHERE C_name IN ((SELECT C_name FROM deposit WHERE B_name = 'Kolkata') 
+INTERSECT (Select C_name FROM customer WHERE City = 'Kolkata')) AND amount >= ALL((Select amount FROM deposit WHERE B_name = 'HDFCBG') 
+INTERSECT (Select amount FROM customer WHERE City = 'Kolkata'));
+
+no rows selected
+
+20. Give the name of the branches having the no. of depositors more than the no. of borrowers. 
+SQL> Select deposit.B_name FROM deposit group by B_name having COUNT(C_name) > ALL(Select COUNT(borrow.c_name) FROM borrow WHERE borrow.B_name=deposit.B_name group by B_name );
+
+B_NAME
+----------
+SBIBG
+HDFCBG
+
+

@@ -1,0 +1,267 @@
+cmd - 
+CREATE TABLE Cust (
+    Cust_id Varchar2(3),
+    Lname Varchar2(15),
+    Fname Varchar2(15),
+    Area Varchar2(2),
+    Phone_no number(8)
+);
+
+Insert first row ---
+INSERT into Cust(Cust_id, Lname, Fname, Area, Phone_no)
+VALUES('A', 'Tanmay', 'Mahato', 'IT', 98765432);
+
+Insert second row ---
+INSERT into Cust(Cust_id, Lname, Fname, Area, Phone_no)
+VALUES('B', 'Soham', 'Das', 'CS', 98765);
+
+Insert third row ---
+INSERT into Cust(Cust_id, Lname, Fname, Area, Phone_no)
+VALUES('C', 'Adesh', 'Maharaj', 'EE', 1234565);
+
+Insert fourth row ---
+INSERT into Cust(Cust_id, Lname, Fname, Area, Phone_no)
+VALUES('C', 'Jatin', 'Motwani', 'EE', 3455633);
+
+Insert fifth row ---
+INSERT into Cust(Cust_id, Lname, Fname, Area, Phone_no)
+VALUES('R', 'Rudreshwar', 'Baranwal', 'IT', 8840173);
+
+To view the table ---
+SELECT *from Cust;
+
+CUS LNAME           FNAME           AR   PHONE_NO
+--- --------------- --------------- -- ----------
+A   Tanmay          Mahato          IT   98765432
+B   Soham           Das             CS      98765
+C   Adesh           Maharaj         EE    1234565
+C   Jatin           Motwani         EE    3455633
+R   Rudreshwar      Baranwal        IT    8840173
+A   Tanmay          Mahato          IT   98765432
+
+
+
+
+CREATE TABLE movie (
+Mv_no number(2),
+Title Varchar2(25),
+Type Varchar2(10),
+Star Varchar2(25),
+Price number(8, 2)
+);
+
+INSERT into movie(Mv_no, Title, Type, Star, Price)
+VALUES(1, 'Deadpool', 'Erotic', 'Ryan Renolds', 1000);
+
+INSERT into movie(Mv_no, Title, Type, Star, Price)
+VALUES(2, 'Titanic', 'Emotional', 'Leonardo Dicaprio', 2000);
+
+INSERT into movie(Mv_no, Title, Type, Star, Price)
+VALUES(2, 'Revenant', 'Revenge', 'Leonardo Dicaprio', 3000);
+
+INSERT into movie(Mv_no, Title, Type, Star, Price)
+VALUES(2, 'Dhoom', 'Action', 'Hrithik Roshan', 3000);
+
+INSERT into movie(Mv_no, Title, Type, Star, Price)
+VALUES(2, 'Hera Pheri', 'Comedy', 'Akshay Kumar', 3000);
+
+O/P ->
+SELECT *from movie;
+
+     Mv_no TITLE                     TYPE       STAR
+---------- ------------------------- ---------- -------------------------
+     PRICE
+----------
+         1 Deadpool                  Erotic     Ryan Renolds
+      1000
+
+         2 Titanic                   Emotional  Leonardo Dicaprio
+      2000
+
+         2 Revenant                  Revenge    Leonardo Dicaprio
+      3000
+
+
+     Mv_no TITLE                     TYPE       STAR
+---------- ------------------------- ---------- -------------------------
+     PRICE
+----------
+         2 Dhoom                     Action     Hrithik Roshan
+      3000
+
+         2 Hera Pheri                Comedy     Akshay Kumar
+      3000
+
+
+
+Create 3rd Table --- 
+
+CREATE TABLE invoice (
+Inv_no Varchar2(3),
+Mv_no number(2),
+Cust_id Varchar2(3),
+Issue_date date,
+Return_date date
+);
+
+Insert First Row ---
+INSERT into invoice(Inv_no, Mv_no, Cust_id, Issue_date, Return_date)
+VALUES('acd', 34, 'ITB', '23-AUG-21', '26-SEP-21');
+
+Insert 2nd row ---
+INSERT into invoice(Inv_no, Mv_no, Cust_id, Issue_date, Return_date)
+VALUES('bbd', 27, 'ITB', '23-AUG-23', '26-DEC-23');
+
+Insert 3rd row ---
+INSERT into invoice(Inv_no, Mv_no, Cust_id, Issue_date, Return_date)
+VALUES('hel', 90, 'CSB', '23-AUG-21', '26-DEC-22');
+
+Insert 4th row ---
+INSERT into invoice(Inv_no, Mv_no, Cust_id, Issue_date, Return_date)
+VALUES('etc', 30, 'ETB', '20-JAN-22', '01-SEP-22');
+
+Insert 5th row ---
+INSERT into invoice(Inv_no, Mv_no, Cust_id, Issue_date, Return_date)
+VALUES('qwe', 21, 'TAB', '01-JUN-22', '01-JUL-22');
+
+Printing the table ---
+SELECT *from invoice;
+
+O/P -->
+INV      Mv_no CUS ISSUE_DAT RETURN_DA
+--- ---------- --- --------- ---------
+acd         34 ITB 23-AUG-21 26-SEP-21
+bbd         27 ITB 23-AUG-23 26-DEC-23
+hel         90 CSB 23-AUG-21 26-DEC-22
+etc         30 ETB 20-JAN-22 01-SEP-22
+qwe         21 TAB 01-JUN-22 01-JUL-22
+
+
+Que 1: Find out the name of all the customers
+
+SELECT Lname, Fname from Cust;
+
+LNAME           FNAME
+--------------- ---------------
+Tanmay          Mahato
+Soham           Das
+Adesh           Maharaj
+Jatin           Motwani
+Rudreshwar      Baranwal
+Tanmay          Mahato
+
+Que 2: List the various movie types available from the movie table
+
+SELECT Type from movie;
+
+TYPE
+----------
+Erotic
+Emotional
+Revenge
+Action
+Comedy
+
+Que 3: Print the list of all the employees whose phone numbers are greater than the value 5550000
+
+SELECT Lname, Fname from Cust where Phone_no>5550000;
+
+LNAME           FNAME
+--------------- ---------------
+Tanmay          Mahato
+Rudreshwar      Baranwal
+Tanmay          Mahato
+
+Que 4: Find the movies of type 'action' or 'comedy'
+
+SELECT Title from movie where Type = ANY('Action', 'Comedy');
+
+TITLE
+-------------------------
+Dhoom
+Hera Pheri
+
+Que 5: Find the movies whose price is greater than 150 and less than or equal to 200
+
+SELECT Title from movie where Price>150 AND Price<200;
+
+no rows selected
+
+SQL> SELECT Title from movie where Price>1500 AND Price<2001;
+
+TITLE
+-------------------------
+Titanic
+
+Que 6: Find the name of all the customers having 'a' as the second letter in their fnames
+
+SELECT Lname, Fname from Cust where Fname like '_a%';
+
+LNAME           FNAME
+--------------- ---------------
+Tanmay          Mahato
+Soham           Das
+Adesh           Maharaj
+Rudreshwar      Baranwal
+Tanmay          Mahato
+
+Que 7: Find the lname of all the customers that begins with 's' or 'j'
+
+SELECT Lname, Fname from Cust where Lname = ALL('s%','j%');
+
+no rows selected
+
+Que 8: Find out the customers who stay in an area whose second letter is 'a'
+
+SELECT Lname, Fname from Cust where Area like '_a%';
+
+no rows selected
+
+Que 9: Find list of all customers who stay in area 'da' or area 'mu' or area 'gh'
+
+SELECT Lname, Fname from Cust where Area = ANY('da', 'mu', 'gh');
+
+no rows selected
+
+SELECT Lname, Fname from Cust where Area = ANY('da', 'IT', 'gh');
+
+LNAME           FNAME
+--------------- ---------------
+Tanmay          Mahato
+Rudreshwar      Baranwal
+Tanmay          Mahato
+
+Que 10: List the Mv_no, title, type of movies whose star begin with letter 'm'
+
+SELECT Mv_no, Title, Type from movie where Star like 'm%';
+
+no rows selected
+
+SELECT Mv_no, Title, Type from movie where Star like 'H%';
+
+     Mv_no TITLE                     TYPE
+---------- ------------------------- ----------
+         2 Dhoom                     Action
+
+
+Que 11: Find the movies that cost more than 150 and also find the new cost as original cost*15
+
+SELECT Title from movie where Price>150;
+
+TITLE
+-------------------------
+Deadpool
+Titanic
+Revenant
+Dhoom
+Hera Pheri
+
+SELECT Price*15 new_Price from movie;
+
+ NEW_PRICE
+----------
+     15000
+     30000
+     45000
+     45000
+     45000

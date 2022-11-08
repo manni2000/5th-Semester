@@ -1,0 +1,76 @@
+Joints and Correlations:
+
+29)  Find out the movie number which has been issued to 'Manish'. 
+
+SQL> select mv_no from invoice where cust_id = (select cust_id from cust where fname = 'Manish');
+
+ MV_NO
+------
+   1
+
+30) Find the names and movie numbers of all the customers who have been issued a movie .
+
+SQL> select fname, lname, mv_no from cust, invoice where invoice.cust_id = cust.cust_id;
+
+FNAME	LNAME	MV_NO
+----------------------
+Manish	Kumar	1
+Divyam	Sharma	2
+Akash	Sarkar	3
+Satyam	Patil	4
+SubhrajitMondal	5
+
+
+5 rows selected.
+
+
+31) Select the title ,cust_id, mv_no for all the movies that are issued. 
+
+SQL> select title, cust_id, invoice.mv_no from movie, invoice where invoice.mv_no = movie.mv_no;
+
+TITLE                     CUS  MV_NO
+------------------------- --- --------
+Oxygen	                  123	1
+Fury	                  124	2
+Venom	                  225	3
+Spiderhead                126	4
+RRR	                  127	5
+
+5 rows selected.
+
+
+32) Find out the title and types of the movies that have been issued to 'Neeraj'.
+
+SQL> select title,type from movie where mv_no in (select mv_no from invoice where cust_id in (select cust_id from cust where fname='Neeraj'));
+
+TITLE                     TYPE
+------------------------- ----------
+Venom	                   SciFi
+
+
+33) Find the names of customers who have been issued movie of type �Action�
+
+SQL> select fname, lname from cust where cust_id in (select cust_id  from invoice where mv_no in ( select mv_no from movie where type = 'Action'));
+
+FNAME           LNAME
+--------------- ---------------
+Satyam	        Patil
+Subhrajit	Mondal
+
+2 rowa selected.
+
+
+34) Display the title, lname, fname for customers having movie number greater than or equal to three , in the following format: �The movie taken by {fname} {lname} is {title}. 
+
+SQL> select 'The movie taken by ' || fname|| ' ' || lname || ' is ' || title from cust, movie, invoice where invoice.cust_id = cust.cust_id and movie.mv_no = invoice.mv_no and movie.mv_no >= 3;
+
+'THEMOVIETAKENBY'||FNAME||''||LNAME||'IS'||TITLE
+-------------------------------------------------------------------------------
+The movie taken by Akash Sarkar is Venom
+The movie taken by Satyam Patil is Spiderhead
+The movie taken by Subhrajit Mondal is RRR
+
+3 rows selected.
+
+
+
