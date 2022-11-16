@@ -1,0 +1,83 @@
+
+1. Write a PL/SQl code to check a given year is leap year or not.
+
+SQL-
+DECLARE
+   year NUMBER := 2022;
+BEGIN
+   IF MOD(year, 4)=0
+      AND
+      MOD(year, 100)!=0
+      OR
+      MOD(year, 400)=0 THEN
+      dbms_output.Put_line(year || ' is leap year ');
+   ELSE
+      dbms_output.Put_line(year || ' is not leap year.');
+   END IF;
+END;
+/
+
+OUTPUT- 2022 is not leap year.
+
+2. Write a pl/sql program to find whether a given number is palindrome or not. 
+
+SQL-
+declare
+    n number;
+    m number;
+    rev number:=0;
+    r number;
+begin
+    n:=&n;
+    m:=n;
+    while n>0
+    loop
+        r:=mod(n,10);
+        rev:=(rev*10)+r;
+        n:=trunc(n/10);
+end loop;
+    if m=rev
+    then
+        dbms_output.put_line('Given' || m ||' is palindrome');
+    else
+        dbms_output.put_line('Given' || m || 'is not palindrome');
+    end if;
+end;
+/
+
+OUTPUT- Enter value for n: 121
+        old   7:     n:=&n;
+        new   7:     n:=121;
+        Given 121 is palindrome
+
+3. Write a pl/sql program to find whether a given number is an Armstrong number or not.
+
+SQL-
+DECLARE
+   n number(3)=124;
+   s number(3):=0;
+   t number(3);
+ BEGIN
+   n:=&n;
+   t:=n;
+       while t>0 loop
+         s:=s+power((t mod 10),3);
+         t:=trunc(t/10);
+       end loop;
+  
+       if(s=n) then
+         dbms_output.put_line('The Given Number ' || n || ' is an Armstrong Number');
+       else
+         dbms_output.put_line('The Given Number ' || n || ' is Not an Armstrong Number');
+       end if;
+ END;
+ /
+
+OUTPUT- Enter value for n: 153
+old   6:   n:=&n;
+new   6:   n:=153;
+The Given Number 153 is an Armstrong Number
+
+8. Write a pl/sql program that accept account no from terminal and update the amount by adding
+Rs.2000 if the amount is less than 5000. The update is reflected in deposit table.
+
