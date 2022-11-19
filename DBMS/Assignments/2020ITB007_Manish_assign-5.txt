@@ -1,85 +1,264 @@
+Name- Manish kumar
+Roll- 2020ITB007
+Group-HX 
+                                                      
+                    Assignment-5
 
-1. Write a PL/SQl code to check a given year is leap year or not.
+1. Write a cursor program to delete first 2 rows in employee 
+   table getting highest salary.
 
-SQL-
+Create Table emp
+(
+ecode varchar2(5),
+name varchar2(10),
+salary number(6),
+city varchar2(10)
+);
+
+insert into emp values('abc','Manish',1000,'Kolkata');
+insert into emp values('bcd','Akash',5000,'Delhi');
+insert into emp values('xyz','Divyam',1500,'Mumbai');
+insert into emp values('wxy','Neha',25000,'Pune');
+insert into emp values('ghj','Raja',12000,'Agra');
+
+SET ServerOutput ON;
 DECLARE
-   year NUMBER := 2022;
+    CURSOR c1 IS SELECT ecode from emp ORDER BY salary DESC;
+    emp_no varchar2(5);
 BEGIN
-   IF MOD(year, 4)=0
-      AND
-      MOD(year, 100)!=0
-      OR
-      MOD(year, 400)=0 THEN
-      dbms_output.Put_line(year || ' is leap year ');
-   ELSE
-      dbms_output.Put_line(year || ' is not leap year.');
-   END IF;
+    OPEN c1;
+    FOR i IN 1..2 LOOP
+    FETCH c1 into emp_no;
+    EXIT WHEN c1%NOTFOUND;
+    DELETE FROM emp where ecode=emp_no;
+    COMMIT;
+    END LOOP;
+    CLOSE c1;
 END;
 /
+_____________________________________________________________________________
 
-OUTPUT- 2022 is not leap year.
+2. Consider a employee table. Write a cursor program to raise the salary of
+the employees by 15% who are in ‘Kolkata’ and display how many rows
+are affected in the Employee table.
 
-2. Write a pl/sql program to find whether a given number is palindrome or not. 
-
-SQL-
-declare
-    n number;
-    m number;
-    rev number:=0;
-    r number;
-begin
-    n:=&n;
-    m:=n;
-    while n>0
+SET ServerOutput ON;
+DECLARE
+    cursor c is select ecode from emp where city='Kolkata';
+  ec emp.ecode%type;
+    count1 number;
+BEGIN
+    count1:=0;
+    open c;
     loop
-        r:=mod(n,10);
-        rev:=(rev*10)+r;
-        n:=trunc(n/10);
-end loop;
-    if m=rev
-    then
-        dbms_output.put_line('Given' || m ||' is palindrome');
-    else
-        dbms_output.put_line('Given' || m || 'is not palindrome');
-    end if;
+        fetch c into ec;
+        if c%notfound then
+        dbms_output.put_line('No records found !');
+        exit;
+        end if;
+        update emp set salary=salary+(salary*0.15) where ecode=ec;
+        count1:= count1+1;
+     end loop;
+     dbms_output.put_line('No. of records updated is '|| count1);
+     if c%isopen then
+     close c;
+     end if;
+END;
+/
+_____________________________________________________________________________
+
+3. Accept two account numbers from the terminal. Write a PL/SQL
+   procedure to do the following.
+  a) Transfer Rs. 2000 from one account to another account.
+     If there is no sufficient balance in the account to transfer , 
+     then show appropriate message .
+  b) Write a cursor program to raise 5% of the present account balance to
+     the first three customers who are older than 60.
+
+a.)
+SET ServerOutput ON;
+DECLARE
+    ac_no1 varchar(8):='&ac_no1';
+    ac_no2 varchar(10):='&ac_no2';
+    CURSOR c IS SELECT Act_no FROM deposit;
+    a deposit.Act_no%type;
+    b deposit.amount%type;
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Amount of Rs. 2000/- is to be transferred from Account No:
+    '||ac_no1||' to Account No: '||ac_no2);
+    open c;
+    loop
+       fetch c into a;
+       if c%notfound THEN
+       EXIT;
+    END IF;
+
+if a=ac_no1 then
+
+     select amount into b from deposit where Act_no=a;
+     if b>1999 then
+        update deposit set amount=amount- 2000 where Act_no=a;
+        update deposit set amount=amount + 2000 where
+
+Act_no=ac_no2;
+
+      DBMS_OUTPUT.PUT_LINE('Amount of Rs. 2000/- has been
+
+      transferred from Account No: '||ac_no1||' to Account No: '||ac_no2);
+
+else
+     DBMS_OUTPUT.PUT_LINE('Insufficient amt.amt of Rs. 2000/- cannot be
+
+     transfered from Account No: '||ac_no1);
+
+     end if;
+     end if;
+     end loop;
+     IF c%ISOPEN THEN
+     CLOSE c;
+     end if;
 end;
 /
 
-OUTPUT- Enter value for n: 121
-        old   7:     n:=&n;
-        new   7:     n:=121;
-        Given 121 is palindrome
-
-3. Write a pl/sql program to find whether a given number is an Armstrong number or not.
-
-SQL-
+b.)
+SET ServerOutput ON;
 DECLARE
-   n number(3)=124;
-   s number(3):=0;
-   t number(3);
- BEGIN
-   n:=&n;
-   t:=n;
-       while t>0 loop
-         s:=s+power((t mod 10),3);
-         t:=trunc(t/10);
-       end loop;
-  
-       if(s=n) then
-         dbms_output.put_line('The Given Number ' || n || ' is an Armstrong Number');
-       else
-         dbms_output.put_line('The Given Number ' || n || ' is Not an Armstrong Number');
-       end if;
- END;
- /
+    cursor c is select act_no from deposit where age>60;
+    a deposit.act_no%type;
+    t integer:=0;
+BEGIN
+    open c;
+    loop
+        fetch c into a;
+        if c%notfound then
+        exit;
+        end if;
+        if t<3 then
+           update deposit set amount=1.05*amount where act_no=a;
+           t:=t+1;
+        end if;
+    end loop;
+    if c%isopen then
+        close c;
+    end if;
+END;
+/
+_____________________________________________________________________________
 
-OUTPUT- Enter value for n: 153
-old   6:   n:=&n;
-new   6:   n:=153;
-The Given Number 153 is an Armstrong Number
+4. Write a PL/SQL block of code that first inserts a record in an ‘emp’
+table. Update the salary by Rs. 2000. Then check to see that the total
+salary of the employees does not exceed 20000. If so, undo the updates
+made to the salary.
 
+SET ServerOutput ON;
+DECLARE
+     cursor c is select salary from emp;
+     s employee.salary%type;
+     temp number(7,2);
+BEGIN
 
+SAVEPOINT SP;
+     open c;
+     loop
+        fetch c into s;
+        if c%notfound then
+        exit;
+        end if;
+        update emp
+        set salary=salary+2000
+        where salary=s;
+     end loop;
+     if c%isopen then
+        close c;
+     end if;
+     open c;
+     loop
+        fetch c into s;
+        if c%notfound then
+        exit;
+        end if;
+        if s>20000 then
+            update emp
+            set salary=salary-2000
+            where salary=s;
+        end if;
+      end loop;
+      Select sum(salary) into temp from emp;
+      If(temp>20000) then
+            Dbms_output.put_line(‘Value exceeded, UNDOing Operation’);
+      Rollback to SP;
+      Else
+            Dbms_output.put_line(‘ Done!’);
+      end if;
+      if c%isopen then
 
-8. Write a pl/sql program that accept account no from terminal and update the amount by adding
-Rs.2000 if the amount is less than 5000. The update is reflected in deposit table.
+           close c;
+      end if;
+END;
+/
+__________________________________________________________________________
 
+5. Consider the emp table (eno, sal, dno, add).Find the salary of the
+employee for a given department no. If the department no. is not included
+in the emp table or a numbers of rows for a given dno then handle
+through exception handler.
+
+SET ServerOutput ON;
+declare
+    dnum emp.dno%type:='&dnum';
+    e_sal number(10,2);
+begin
+    select salary into e_sal from emp where emp.edno = dnum;
+    dbms_output.put_line('Salary of employee having '||dnum ||' is '||e_sal);
+exception
+    WHEN no_data_found THEN
+        dbms_output.put_line('No such department!');
+    WHEN too_many_rows then
+        dbms_output.put_line('More than one entry!');
+end;
+/
+_____________________________________________________________________________
+
+6. Consider the table product (pno, pname, actual_price, sale_price). For a
+given pno, profit can be calculated by actual_price and sale_price. Find
+out the profit of a given pno. If the pno is not included in the table
+product or profit is zero (handle by user defined exception), then handle
+the error.
+
+Create Table Product
+(
+pno varchar2(2),
+pname varchar2(10),
+actual_price number(10,2),
+sale_price number(10,2)
+);
+
+insert into product values('H1','A',150,170);
+insert into product values('H2','B',100,130);
+insert into product values('H3','C',100,80);
+insert into product values('H4','D',50,50);
+insert into product values('H5','E',130,210);
+
+SET ServerOutput ON;
+DECLARE
+     pnum product.pno%type:='&pnum';
+     profit number(10,2);
+     zero_profit exception;
+BEGIN
+     select (sale_price-actual_price) into profit
+     from product where product.pno=pnum;
+     if profit>0 then
+        dbms_output.put_line('Profit is '||profit);
+     else
+        raise zero_profit;
+     end if;
+EXCEPTION
+     WHEN no_data_found THEN
+        dbms_output.put_line('No such product!');
+     WHEN zero_profit THEN
+        dbms_output.put_line('NO PROFIT !!!');
+END;
+/
+_____________________________________________________________________________
+
+               END
